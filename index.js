@@ -24,10 +24,9 @@ const cr_model = {
   rates: [{ code: "", value: "" }]
 };
 
-const cr_view = ({ rate_date, rate_base, rates }) => {
-  const contentHTML = `
-    Base: ${rate_base}<br />
-    Date: ${rate_date}<br />
+const cr_view = `
+    Base: ${cr_model.rate_base}<br />
+    Date: ${cr_model.rate_date}<br />
     <table>
     <thead>
       <tr>
@@ -36,7 +35,7 @@ const cr_view = ({ rate_date, rate_base, rates }) => {
       </tr>
     </thead>
     <tbody>
-      ${rates
+      ${cr_model.rates
         .map(
           rate => `
             <tr>
@@ -49,27 +48,16 @@ const cr_view = ({ rate_date, rate_base, rates }) => {
     </tbody>
     </table>
   `;
-};
 
-const cr_controls = dateArray => {
-  const controlsHTML = `
-  ${dateArray
-    .map(
-      date => `
-      <button>${dateToString(date)}</button>
-      `
-    )
-    .join("")}
-  `;
-};
+const cr_controls = dateArray
+  .reverse()
+  .map(date => {
+    `<button rate-date='${dateToString(date)}'>${dateToString(date)}</button>`;
+  })
+  .join("");
 
 const appDiv = document.getElementById("app");
 appDiv.innerHTML = `<h1>Currency rates</h1>`;
 const controls = document.createElement("div");
 appDiv.appendChild(controls);
-
-const dateButton = document.createElement("button");
-dateButton.setAttribute("class", "app__button");
-const buttonName = dateToString(dateArray[0]);
-dateButton.innerHTML = buttonName;
-controls.appendChild(dateButton);
+controls.innerHTML = cr_controls;
