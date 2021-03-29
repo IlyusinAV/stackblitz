@@ -11,12 +11,11 @@ const dateToString = date =>
   )}`;
 
 const dateNow = new Date();
-const dateArray = new Array(7).fill(dateNow);
-for (let i = 1; i < 7; i++) {
-  let date = new Date();
-  date.setDate(dateNow.getDate() - i);
-  dateArray[i] = date;
-}
+const dateArray = new Array(7).fill("").map((_, num) => {
+  const date = new Date();
+  date.setDate(dateNow.getDate() - num);
+  return dateToString(date);
+});
 
 const cr_model = {
   rate_date: "",
@@ -51,9 +50,7 @@ const cr_view = `
 
 const cr_controls = dateArray
   .reverse()
-  .map(date => {
-    `<button rate-date='${dateToString(date)}'>${dateToString(date)}</button>`;
-  })
+  .map(date => `<button rate-date='${date}'>${date}</button>`)
   .join("");
 
 const appDiv = document.getElementById("app");
@@ -61,3 +58,6 @@ appDiv.innerHTML = `<h1>Currency rates</h1>`;
 const controls = document.createElement("div");
 appDiv.appendChild(controls);
 controls.innerHTML = cr_controls;
+const view = document.createElement("div");
+appDiv.appendChild(view);
+view.innerHTML = cr_view;
